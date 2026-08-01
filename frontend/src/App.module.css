@@ -1,0 +1,480 @@
+.shell {
+  width: min(1480px, 100%);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 22px 28px 18px;
+}
+
+.topBar,
+.workspace,
+.panelHeader,
+.mapFooter,
+.commandBar,
+.identity,
+.connection,
+.systemCard header {
+  display: flex;
+  align-items: center;
+}
+
+.topBar {
+  justify-content: space-between;
+  min-height: 74px;
+  padding: 0 4px 18px;
+  border-bottom: 1px solid rgba(232, 227, 214, 0.18);
+}
+
+.identity {
+  gap: 15px;
+}
+
+.insignia {
+  display: grid;
+  width: 44px;
+  height: 50px;
+  place-items: center;
+  border: 1px solid rgba(227, 168, 87, 0.58);
+  color: var(--signal-amber);
+  font-family: Bahnschrift, "Arial Narrow", sans-serif;
+  font-size: 25px;
+  font-weight: 700;
+  clip-path: polygon(0 0, 100% 0, 100% 74%, 50% 100%, 0 74%);
+}
+
+.identity h1,
+.panelHeader h2,
+.turnCard h2 {
+  margin: 0;
+  font-family: Bahnschrift, "Arial Narrow", sans-serif;
+  font-stretch: condensed;
+  font-weight: 600;
+  letter-spacing: 0.035em;
+}
+
+.identity h1 {
+  font-size: clamp(1.35rem, 2vw, 2rem);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.eyebrow,
+.dataLabel,
+.connectionLabel,
+.buildMark {
+  margin: 0 0 5px;
+  color: rgba(232, 227, 214, 0.56);
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.connection {
+  gap: 10px;
+  min-width: 160px;
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.connection strong {
+  display: block;
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.connectionPulse {
+  width: 9px;
+  height: 9px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  outline: 1px solid currentColor;
+  background: currentColor;
+}
+
+.connection[data-state="connected"] {
+  color: #91c9ad;
+}
+
+.connection[data-state="connecting"],
+.connection[data-state="reconnecting"] {
+  color: var(--signal-amber);
+}
+
+.connection[data-state="offline"] {
+  color: var(--danger);
+}
+
+.workspace {
+  align-items: stretch;
+  gap: 18px;
+  padding: 18px 0;
+}
+
+.mapPanel {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  border: 1px solid rgba(232, 227, 214, 0.2);
+  background: rgba(16, 29, 37, 0.78);
+  box-shadow: 0 24px 70px rgba(2, 10, 14, 0.22);
+}
+
+.panelHeader {
+  justify-content: space-between;
+  min-height: 80px;
+  padding: 14px 18px;
+}
+
+.panelHeader h2 {
+  font-size: clamp(1.2rem, 2vw, 1.75rem);
+}
+
+.mapMeta {
+  display: flex;
+  gap: 8px;
+}
+
+.mapMeta span,
+.statusTag {
+  border: 1px solid rgba(232, 227, 214, 0.16);
+  padding: 6px 8px;
+  color: rgba(232, 227, 214, 0.72);
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mapFooter {
+  gap: 26px;
+  min-height: 76px;
+  padding: 13px 18px;
+}
+
+.mapFooter > div {
+  min-width: 72px;
+}
+
+.mapFooter strong {
+  display: block;
+  color: var(--mist);
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: 0.9rem;
+}
+
+.mapFooter p {
+  max-width: 480px;
+  margin: 0 0 0 auto;
+  color: rgba(232, 227, 214, 0.48);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  text-align: right;
+}
+
+.commandRail {
+  display: flex;
+  width: 294px;
+  flex: 0 0 294px;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.turnCard,
+.systemCard,
+.legendCard {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(232, 227, 214, 0.18);
+  background: rgba(27, 43, 53, 0.84);
+}
+
+.turnCard {
+  min-height: 270px;
+  padding: 22px 20px 20px 34px;
+}
+
+.turnTrack {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 10px;
+  border-right: 1px solid rgba(227, 168, 87, 0.45);
+  background: rgba(227, 168, 87, 0.08);
+}
+
+.turnTrack span {
+  position: absolute;
+  top: 25%;
+  right: -4px;
+  width: 7px;
+  height: 34%;
+  background: var(--signal-amber);
+  box-shadow: 0 0 18px rgba(227, 168, 87, 0.42);
+}
+
+.turnNumber {
+  margin: 3px 0 -5px;
+  color: var(--signal-amber);
+  font-family: Bahnschrift, "Arial Narrow", sans-serif;
+  font-size: 5.2rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+.turnCard h2 {
+  max-width: 210px;
+  font-size: 1.25rem;
+  line-height: 1.1;
+}
+
+.muted {
+  margin: 11px 0 17px;
+  color: rgba(232, 227, 214, 0.55);
+  font-size: 0.79rem;
+  line-height: 1.45;
+}
+
+.turnCard button {
+  width: 100%;
+  border: 1px solid rgba(232, 227, 214, 0.18);
+  padding: 10px 12px;
+  color: rgba(232, 227, 214, 0.38);
+  background: rgba(5, 14, 19, 0.28);
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.turnCard button:not(:disabled) {
+  border-color: rgba(227, 168, 87, 0.72);
+  color: #201a12;
+  background: var(--signal-amber);
+}
+
+.turnCard button:not(:disabled):hover {
+  background: #efbb6d;
+}
+
+.actionError {
+  border-left: 2px solid var(--danger);
+  margin: 0 0 12px;
+  padding: 7px 9px;
+  color: #f0c2bc;
+  background: rgba(201, 87, 87, 0.1);
+  font-size: 0.69rem;
+  line-height: 1.4;
+}
+
+.systemCard,
+.legendCard {
+  padding: 16px 18px;
+}
+
+.systemCard header {
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.statusTag {
+  border-color: rgba(76, 122, 115, 0.7);
+  color: #a9cabd;
+}
+
+.systemCard dl {
+  margin: 0;
+}
+
+.systemCard dl > div {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-top: 1px solid rgba(232, 227, 214, 0.09);
+  font-size: 0.75rem;
+}
+
+.systemCard dt {
+  color: rgba(232, 227, 214, 0.48);
+}
+
+.systemCard dd {
+  margin: 0;
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: 0.69rem;
+}
+
+.leaveButton {
+  width: 100%;
+  margin-top: 12px;
+  border: 1px solid rgba(232, 227, 214, 0.16);
+  padding: 8px 10px;
+  color: rgba(232, 227, 214, 0.62);
+  background: transparent;
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.leaveButton:hover {
+  border-color: rgba(232, 227, 214, 0.34);
+  color: var(--mist);
+}
+
+.legendCard ul {
+  display: grid;
+  gap: 10px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.objective {
+  margin: 8px 0 14px;
+  color: rgba(232, 227, 214, 0.72);
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
+.legendCard li {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: rgba(232, 227, 214, 0.64);
+  font-size: 0.74rem;
+}
+
+.friendlyMarker,
+.hostileMarker,
+.selectionMarker {
+  width: 10px;
+  height: 10px;
+  flex: 0 0 10px;
+  border-radius: 50%;
+}
+
+.friendlyMarker {
+  border: 2px solid #183b43;
+  background: #d7e4dc;
+}
+
+.hostileMarker {
+  border: 2px solid #f4d2c8;
+  background: var(--danger);
+}
+
+.selectionMarker {
+  border: 2px solid var(--signal-amber);
+  border-radius: 2px;
+  background: transparent;
+}
+
+.commandBar {
+  min-height: 46px;
+  gap: 24px;
+  padding: 10px 4px 0;
+  border-top: 1px solid rgba(232, 227, 214, 0.18);
+}
+
+.commandBar > .dataLabel {
+  margin: 0;
+}
+
+.commandHint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(232, 227, 214, 0.56);
+  font-size: 0.72rem;
+}
+
+.commandHint kbd {
+  border: 1px solid rgba(232, 227, 214, 0.22);
+  padding: 4px 7px;
+  color: var(--mist);
+  background: rgba(16, 29, 37, 0.9);
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: 0.65rem;
+  box-shadow: inset 0 -2px rgba(0, 0, 0, 0.24);
+}
+
+.buildMark {
+  margin: 0 0 0 auto;
+}
+
+@media (max-width: 960px) {
+  .workspace {
+    flex-direction: column;
+  }
+
+  .commandRail {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .turnCard {
+    grid-row: span 2;
+  }
+}
+
+@media (max-width: 680px) {
+  .shell {
+    padding: 14px 14px 10px;
+  }
+
+  .topBar {
+    align-items: flex-start;
+  }
+
+  .identity h1 {
+    font-size: 1.1rem;
+  }
+
+  .insignia {
+    width: 36px;
+    height: 42px;
+  }
+
+  .connectionLabel,
+  .mapMeta span:last-child,
+  .mapFooter p,
+  .commandBar > .dataLabel,
+  .buildMark {
+    display: none;
+  }
+
+  .connection {
+    min-width: auto;
+  }
+
+  .panelHeader {
+    min-height: 68px;
+  }
+
+  .mapFooter {
+    min-height: 66px;
+  }
+
+  .commandRail {
+    display: flex;
+  }
+
+  .turnCard {
+    min-height: 250px;
+  }
+
+  .commandBar {
+    justify-content: space-between;
+    gap: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+}

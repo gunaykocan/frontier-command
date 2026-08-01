@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://game.local/contracts/http/system-status.schema.json",
+  "title": "SystemStatus",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["service", "status", "database", "realtime", "cache", "backplane"],
+  "properties": {
+    "service": { "type": "string" },
+    "status": { "type": "string", "enum": ["ready"] },
+    "database": { "type": "string", "enum": ["postgresql"] },
+    "realtime": { "type": "string", "enum": ["signalr"] },
+    "cache": { "type": "string", "enum": ["redis", "disabled"] },
+    "backplane": { "type": "string", "enum": ["redis", "single-node"] }
+  }
+}

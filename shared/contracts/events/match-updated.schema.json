@@ -1,0 +1,6 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://game.local/contracts/events/match-updated.schema.json",
+  "title": "MatchUpdated",
+  "$ref": "../http/match-snapshot.schema.json"
+}

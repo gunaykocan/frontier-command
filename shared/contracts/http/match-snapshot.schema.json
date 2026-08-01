@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://game.local/contracts/http/match-snapshot.schema.json",
+  "title": "MatchSnapshot",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "name",
+    "status",
+    "turnNumber",
+    "version",
+    "activePlayerId",
+    "winnerPlayerId",
+    "players",
+    "units",
+    "createdAtUtc"
+  ],
+  "properties": {
+    "id": { "type": "string", "format": "uuid" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+    "status": {
+      "type": "string",
+      "enum": ["WaitingForPlayers", "InProgress", "Completed", "Abandoned"]
+    },
+    "turnNumber": { "type": "integer", "minimum": 1 },
+    "version": { "type": "integer", "minimum": 0 },
+    "activePlayerId": {
+      "oneOf": [
+        { "type": "string", "format": "uuid" },
+        { "type": "null" }
+      ]
+    },
+    "winnerPlayerId": {
+      "oneOf": [
+        { "type": "string", "format": "uuid" },
+        { "type": "null" }
+      ]
+    },
+    "players": {
+      "type": "array",
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "seat"],
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "name": { "type": "string", "minLength": 1, "maxLength": 40 },
+          "seat": { "type": "integer", "minimum": 1, "maximum": 2 }
+        }
+      }
+    },
+    "units": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "ownerPlayerId", "column", "row"],
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "ownerPlayerId": { "type": "string", "format": "uuid" },
+          "column": { "type": "integer", "minimum": 0, "maximum": 8 },
+          "row": { "type": "integer", "minimum": 0, "maximum": 6 }
+        }
+      }
+    },
+    "createdAtUtc": { "type": "string", "format": "date-time" }
+  }
+}

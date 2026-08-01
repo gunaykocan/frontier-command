@@ -1,0 +1,159 @@
+.lobby {
+  display: flex;
+  width: 338px;
+  flex: 0 0 338px;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.enlistCard,
+.createCard,
+.openCard {
+  border: 1px solid rgba(232, 227, 214, 0.18);
+  padding: 17px 18px;
+  background: rgba(27, 43, 53, 0.84);
+}
+
+.eyebrow {
+  margin: 0 0 11px;
+  color: rgba(232, 227, 214, 0.56);
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.lobby label {
+  display: grid;
+  gap: 7px;
+  color: rgba(232, 227, 214, 0.58);
+  font-size: 0.72rem;
+}
+
+.lobby input {
+  width: 100%;
+  border: 1px solid rgba(232, 227, 214, 0.2);
+  border-radius: 0;
+  padding: 10px 11px;
+  color: var(--mist);
+  outline: none;
+  background: rgba(8, 20, 27, 0.62);
+}
+
+.lobby input:focus {
+  border-color: var(--signal-amber);
+  box-shadow: 0 0 0 2px rgba(227, 168, 87, 0.13);
+}
+
+.lobby input::placeholder {
+  color: rgba(232, 227, 214, 0.25);
+}
+
+.createCard button,
+.openCard li button {
+  border: 1px solid rgba(227, 168, 87, 0.6);
+  padding: 9px 11px;
+  color: #201a12;
+  background: var(--signal-amber);
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.createCard > button {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.lobby button:disabled {
+  border-color: rgba(232, 227, 214, 0.12);
+  color: rgba(232, 227, 214, 0.32);
+  background: rgba(8, 20, 27, 0.42);
+}
+
+.openCard {
+  min-height: 230px;
+  flex: 1;
+}
+
+.openCard header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 13px;
+}
+
+.openCard header strong {
+  color: var(--signal-amber);
+  font-family: Bahnschrift, "Arial Narrow", sans-serif;
+  font-size: 2.3rem;
+  line-height: 0.8;
+}
+
+.refreshButton {
+  border: 1px solid rgba(232, 227, 214, 0.18);
+  padding: 6px 8px;
+  color: rgba(232, 227, 214, 0.68);
+  background: transparent;
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: 0.63rem;
+  text-transform: uppercase;
+}
+
+.openCard ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.openCard li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid rgba(232, 227, 214, 0.1);
+  padding-top: 10px;
+}
+
+.openCard li strong,
+.openCard li span {
+  display: block;
+}
+
+.openCard li strong {
+  margin-bottom: 3px;
+  font-size: 0.8rem;
+}
+
+.openCard li span,
+.empty {
+  color: rgba(232, 227, 214, 0.46);
+  font-size: 0.69rem;
+}
+
+.empty {
+  margin: 20px 0 0;
+  line-height: 1.55;
+}
+
+.error {
+  border-left: 2px solid var(--danger);
+  margin: 0 0 12px;
+  padding: 8px 10px;
+  color: #f0c2bc;
+  background: rgba(201, 87, 87, 0.1);
+  font-size: 0.7rem;
+  line-height: 1.4;
+}
+
+@media (max-width: 960px) {
+  .lobby {
+    width: 100%;
+    flex: auto;
+  }
+}

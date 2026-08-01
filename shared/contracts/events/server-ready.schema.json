@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://game.local/contracts/events/server-ready.schema.json",
+  "title": "ServerReady",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["connectionId", "connectedAtUtc", "transport"],
+  "properties": {
+    "connectionId": { "type": "string", "minLength": 1 },
+    "connectedAtUtc": { "type": "string", "format": "date-time" },
+    "transport": { "type": "string", "enum": ["signalr"] }
+  }
+}

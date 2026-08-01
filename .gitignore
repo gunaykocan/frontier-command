@@ -1,0 +1,40 @@
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Editors and IDEs
+.idea/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Frontend dependencies and build output
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/coverage/
+frontend/*.local
+.pnpm-store/
+
+# Backend build output
+backend/**/bin/
+backend/**/obj/
+backend/TestResults/
+backend/coverage/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+**/appsettings.*.local.json
+secrets.json
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+
+# Workspace-local toolchains
+.tools/
