@@ -1,6 +1,23 @@
-# Frontier Command — oyun iskeleti
+# Frontier Command
 
-Sıra tabanlı strateji oyunu için React/Canvas istemcisi ile .NET 10 sunucusunu bir araya getiren monorepodur. Oynanabilir dikey dilim; oyun oluşturma, yerleştirme, farklı birlik türleriyle hareket ve çatışma, 90 saniyelik sunucu kontrollü turlar, oyuncuya özel savaş sisi, arazi savunması, gizli bölgeler, maç sonu raporu, taraf değiştiren rövanş, PostgreSQL kaydı ve SignalR güncellemesini kapsar.
+**Sunucu otoriteli, iki oyunculu ve sıra tabanlı bir taktik strateji oyunu.**
+
+Frontier Command; React/HTML5 Canvas istemcisi ile .NET 10 sunucusunu aynı monorepoda bir araya getiren, yerelde uçtan uca oynanabilir bir portföy projesidir. Oyuncular birliklerini yerleştirir, savaş sisi altında keşif yapar ve süreli turlarda rakibin hattını kırmaya çalışır.
+
+## Projenin durumu
+
+Oynanabilir alfa sürümü tamamlandı. İki ayrı tarayıcı oturumuyla maç oluşturma, yerleştirme, hareket, çatışma, tur zaman aşımı, savaş sisi, gizli bölgeler, maç sonucu ve rövanş akışları oynanabilir. Oyun durumu PostgreSQL'de kalıcıdır; değişiklikler SignalR ile iki oyuncuya anlık iletilir.
+
+Kalite kontrolü 75 backend testi, 6 frontend testi ve üretim derlemesinden oluşur. GitHub Actions, her `main` gönderiminde ve pull request'te bu kontrolleri otomatik çalıştırır.
+
+## Teknik açıdan öne çıkanlar
+
+- **Sunucu otoriteli oyun modeli:** istemci sonuç üretmez; komut gönderir, kurallar backend'de doğrulanır.
+- **Oyuncuya özel veri görünümü:** görünmeyen rakip birlikleri yalnızca arayüzde saklanmaz, HTTP ve SignalR yanıtlarından sunucuda çıkarılır.
+- **Eşzamanlılık güvenliği:** maç sürümü, çakışan hamlelerin ve aynı turun iki kez sonlandırılmasının önüne geçer.
+- **Kalıcı tur sayacı:** tur bitiş zamanı veritabanında tutulur; oyuncular bağlı değilken de süre dolabilir.
+- **Katmanlı backend:** Domain, Application, Infrastructure ve API sorumlulukları ayrıdır.
+- **Gerçek altyapı testi:** Docker üzerindeki PostgreSQL ve Redis ile iki oyunculu uçtan uca smoke senaryoları bulunur.
 
 ## Teknoloji tabanı
 
@@ -18,11 +35,14 @@ Sıra tabanlı strateji oyunu için React/Canvas istemcisi ile .NET 10 sunucusun
 ├── frontend/                    React arayüzü ve Canvas taktik alanı
 ├── backend/
 │   ├── Api/                     HTTP uçları, SignalR hub ve başlangıç
+│   ├── Api.Tests/               Kimlik, görünürlük ve zaman aşımı testleri
 │   ├── Application/             Kullanım senaryoları ve portlar
 │   ├── Domain/                  Oyun modeli ve kurallar
 │   ├── Domain.Tests/            Saf oyun kuralı testleri
-│   └── Infrastructure/          PostgreSQL ve Redis adaptörleri
+│   ├── Infrastructure/          PostgreSQL ve Redis adaptörleri
+│   └── Infrastructure.Tests/    Migration ve veri katmanı testleri
 ├── shared/contracts/            İstemci-sunucu sözleşmeleri
+├── .github/workflows/ci.yml     Otomatik test ve üretim derlemesi
 └── compose.yaml                 Yerel PostgreSQL ve Redis servisleri
 ```
 
@@ -40,7 +60,7 @@ Api -> Application <- Infrastructure
 ## Gereksinimler
 
 - Node.js 24 LTS önerilir; Node.js 22.12+ da desteklenir
-- npm veya pnpm
+- pnpm 11
 - .NET 10 SDK
 - Docker Desktop veya uyumlu bir Docker Compose kurulumu
 
@@ -78,8 +98,8 @@ Frontend'i ayrı bir terminalde başlatın:
 
 ```powershell
 cd frontend
-npm install
-npm run dev
+pnpm install
+pnpm dev
 ```
 
 Arayüz `http://localhost:5173`, API ise `http://localhost:5080` adresinde açılır. Vite geliştirme sunucusu `/api`, `/health` ve `/hubs` isteklerini API'ye yönlendirir.
@@ -88,12 +108,12 @@ PostgreSQL, API ve Redis çalışırken iki bağımsız oyuncu oturumu, SignalR 
 
 ```powershell
 cd frontend
-npm run smoke:multiplayer
+pnpm smoke:multiplayer
 ```
 
 Başarılı çalıştırma `status: passed`, tamamlanma zamanı, yeni rövanş kimliği, tarafların değiştiği ve arazi görüşünün doğrulandığı bilgisini yazdırır. Görüş senaryosu rövanşta yenilenen oyuncu oturumlarıyla canlı bağlantıyı yeniden kurar; tepe arkasındaki düşmanın ve hareket olayının gizlenmesini, yandan yaklaşınca görünmesini ve geri çekilince yeniden gizlenmesini sınar. Test maçları inceleme amacıyla veritabanında `Docker E2E` ve `Replay` önekleriyle kalır.
 
-Sayaç hesaplarını bağımsız sınamak için `frontend` klasöründe `npm test` çalıştırılır. Gerçek süre dolumunu ve iki oyuncunun da bağlantısı kesildiğinde tur devrini sınamak için `npm run smoke:timer` kullanılır. Bu test iki gerçek 90 saniyelik tur bekler (yaklaşık üç dakika); test maçı `Timer E2E` önekiyle veritabanında kalır.
+Sayaç hesaplarını bağımsız sınamak için `frontend` klasöründe `pnpm test` çalıştırılır. Gerçek süre dolumunu ve iki oyuncunun da bağlantısı kesildiğinde tur devrini sınamak için `pnpm smoke:timer` kullanılır. Bu test iki gerçek 90 saniyelik tur bekler (yaklaşık üç dakika); test maçı `Timer E2E` önekiyle veritabanında kalır.
 
 ## Hazır uçlar
 
@@ -178,10 +198,10 @@ Tek backend örneğinde Redis backplane kapalıdır. Birden fazla API örneğine
 
 Oyuncu oturumları ASP.NET Core Data Protection ile korunur. Üretim veya birden fazla API örneğinde Data Protection anahtar halkası kalıcı ve tüm API örneklerince paylaşılan güvenli bir depoda tutulmalıdır.
 
-## Sıradaki geliştirme adımları
+## Yol haritası
 
-1. Oyun listesini ve oyuncu presence bilgisini Redis üzerinden canlı güncellemek.
-2. JSON Schema üzerinden C# ve TypeScript tip üretimini otomatikleştirmek.
-3. Görüşten çıkan düşmanların son görülen konumlarını ve bilgi eskimesini tasarlamak.
-4. Birliklere keşif, mevzilenme ve bastırma gibi özel yetenekler eklemek.
-5. Maç geçmişi ve oyuncu başarılarını ayrı bir profil ekranında sunmak.
+1. README'ye kısa oynanış GIF'i ve ekran görüntüleri eklemek.
+2. Temel kullanıcı akışları için React etkileşim testlerini genişletmek.
+3. Oyun dengesini ölçmek için kayıtlı maçlardan denge metrikleri üretmek.
+4. JSON Schema üzerinden C# ve TypeScript tip üretimini otomatikleştirmek.
+5. Birliklere keşif, mevzilenme ve bastırma gibi özel yetenekler eklemek.
