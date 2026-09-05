@@ -46,16 +46,22 @@ Kalite kontrolü 75 backend testi, 6 frontend testi ve üretim derlemesinden olu
 └── compose.yaml                 Yerel PostgreSQL ve Redis servisleri
 ```
 
-Backend bağımlılık yönü:
+## Mimari
 
-```text
-Api -> Application <- Infrastructure
-          |
-          v
-        Domain
+```mermaid
+flowchart LR
+    Frontend[React + Canvas] -->|HTTP| Api[ASP.NET Core API]
+    Api --> Application
+    Application --> Domain
+    Application --> Infrastructure
+    Infrastructure --> PostgreSQL[(PostgreSQL)]
+    Api -->|SignalR| Frontend
+    Api -. ölçekleme .-> Redis[(Redis)]
 ```
 
-`Domain` başka bir katmana bağlı değildir. Sunucu oyun durumunun otoritesidir; istemci yalnızca komut gönderecek, doğrulanmış ve kalıcı hale getirilmiş sonuçlar SignalR üzerinden yayınlanacaktır.
+`Domain` başka bir katmana bağlı değildir. Sunucu oyun durumunun otoritesidir; istemci yalnızca komut gönderir, doğrulanmış ve kalıcı hale getirilmiş sonuçlar SignalR üzerinden yayınlanır.
+
+Katmanların sorumlulukları, bir hamlenin yaşam döngüsü, savaş sisinin sunucuda nasıl gizlendiği ve test yaklaşımı [Türkçe mimari belgesinde](docs/architecture.tr.md) ayrıntılı olarak açıklanır.
 
 ## Gereksinimler
 
