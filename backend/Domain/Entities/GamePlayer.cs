@@ -23,8 +23,15 @@ public sealed class GamePlayer
 
     public int Seat { get; private set; }
 
+    public bool IsReady { get; private set; }
+
     public DateTimeOffset JoinedAtUtc { get; private set; }
 
     internal static GamePlayer Create(Guid matchId, string name, int seat, DateTimeOffset joinedAtUtc) =>
         new(Guid.NewGuid(), matchId, name, seat, joinedAtUtc);
+
+    internal void MarkReady()
+    {
+        IsReady = true;
+    }
 }

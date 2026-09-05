@@ -10,7 +10,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - game-postgres-data:/var/lib/postgresql/data
+      - game-postgres-data:/var/lib/postgresql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U game -d game"]
       interval: 5s

@@ -147,7 +147,9 @@
 }
 
 .mapFooter {
-  gap: 26px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 14px 24px;
   min-height: 76px;
   padding: 13px 18px;
 }
@@ -163,21 +165,69 @@
   font-size: 0.9rem;
 }
 
+.mapFooter .unitReadout {
+  min-width: 215px;
+}
+
+.unitReadout small {
+  display: block;
+  margin-top: 3px;
+  color: rgba(232, 227, 214, 0.5);
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: 0.62rem;
+  line-height: 1.5;
+}
+
+.visionStatus,
+.terrainVisibility {
+  display: block;
+  margin-top: 4px;
+  color: rgba(232, 227, 214, 0.62);
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: 0.62rem;
+}
+
+.unitReadout .reconStatus {
+  color: #efbb6d;
+}
+
+.visionStatus[data-visible="true"] {
+  color: #99d5bb;
+}
+
+.visionStatus[data-visible="false"] {
+  color: #e3a857;
+}
+
+.visionNote {
+  margin: 14px 0 0;
+  padding-left: 10px;
+  border-left: 2px dashed rgba(153, 213, 187, 0.42);
+  color: rgba(232, 227, 214, 0.62);
+  font-size: 0.72rem;
+  line-height: 1.6;
+}
+
 .mapFooter p {
-  max-width: 480px;
-  margin: 0 0 0 auto;
+  flex-basis: 100%;
+  margin: 0;
   color: rgba(232, 227, 214, 0.48);
   font-size: 0.78rem;
   line-height: 1.5;
-  text-align: right;
+  text-align: left;
 }
 
 .commandRail {
   display: flex;
   width: 294px;
+  max-height: min(760px, calc(100vh - 144px));
   flex: 0 0 294px;
   flex-direction: column;
   gap: 12px;
+  padding-right: 3px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-color: rgba(227, 168, 87, 0.38) transparent;
 }
 
 .turnCard,
@@ -189,8 +239,12 @@
   background: rgba(27, 43, 53, 0.84);
 }
 
+.commandRail > * {
+  flex-shrink: 0;
+}
+
 .turnCard {
-  min-height: 270px;
+  min-height: 320px;
   padding: 22px 20px 20px 34px;
 }
 
@@ -257,6 +311,30 @@
   background: #efbb6d;
 }
 
+.actionButtons {
+  display: grid;
+  gap: 8px;
+}
+
+.turnCard .endTurnButton:not(:disabled) {
+  border-color: rgba(232, 227, 214, 0.34);
+  color: rgba(232, 227, 214, 0.78);
+  background: rgba(5, 14, 19, 0.4);
+}
+
+.turnCard .readyButton:not(:disabled) {
+  border-color: rgba(239, 187, 109, 0.88);
+  color: #1d1a13;
+  background: linear-gradient(90deg, #d99c48, #efbb6d);
+  box-shadow: 0 8px 24px rgba(227, 168, 87, 0.16);
+}
+
+.turnCard .endTurnButton:not(:disabled):hover {
+  border-color: rgba(227, 168, 87, 0.62);
+  color: var(--mist);
+  background: rgba(227, 168, 87, 0.08);
+}
+
 .actionError {
   border-left: 2px solid var(--danger);
   margin: 0 0 12px;
@@ -299,9 +377,27 @@
 }
 
 .systemCard dd {
+  display: grid;
+  justify-items: end;
+  gap: 3px;
   margin: 0;
   font-family: "Cascadia Mono", Consolas, monospace;
   font-size: 0.69rem;
+}
+
+.playerReady,
+.playerPreparing {
+  font-size: 0.55rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.playerReady {
+  color: #91c9ad;
+}
+
+.playerPreparing {
+  color: var(--signal-amber);
 }
 
 .leaveButton {
@@ -347,11 +443,40 @@
 
 .friendlyMarker,
 .hostileMarker,
-.selectionMarker {
+.selectionMarker,
+.moveTargetMarker,
+.attackTargetMarker,
+.deploymentMarker,
+.fogMarker,
+.contactMarker,
+.exposedMarker,
+.reinforcementMarker,
+.mineMarker {
   width: 10px;
   height: 10px;
   flex: 0 0 10px;
   border-radius: 50%;
+}
+
+.contactMarker,
+.exposedMarker {
+  display: grid;
+  place-items: center;
+  width: 14px;
+  height: 14px;
+  flex-basis: 14px;
+  color: #efbb6d;
+  font: 700 10px/1 "Cascadia Mono", Consolas, monospace;
+}
+
+.contactMarker {
+  border: 1px dashed #e3a857;
+  background: rgba(227, 168, 87, 0.08);
+}
+
+.exposedMarker {
+  background: #efbb6d;
+  color: #18313a;
 }
 
 .friendlyMarker {
@@ -368,6 +493,109 @@
   border: 2px solid var(--signal-amber);
   border-radius: 2px;
   background: transparent;
+}
+
+.moveTargetMarker {
+  border: 2px solid #99d5bb;
+  border-radius: 2px;
+  background: rgba(118, 182, 139, 0.18);
+}
+
+.attackTargetMarker {
+  border: 2px solid #e36c62;
+  border-radius: 2px;
+  background: rgba(201, 87, 87, 0.18);
+}
+
+.deploymentMarker {
+  border: 1px dashed var(--signal-amber);
+  border-radius: 2px;
+  background: rgba(227, 168, 87, 0.08);
+}
+
+.fogMarker {
+  border: 1px dashed rgba(153, 213, 187, 0.42);
+  border-radius: 2px;
+  background: #09151c;
+  box-shadow: inset 0 0 0 2px rgba(4, 13, 18, 0.72);
+}
+
+.reinforcementMarker,
+.mineMarker {
+  display: grid;
+  place-items: center;
+  border-radius: 1px;
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: 0.56rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.reinforcementMarker {
+  border: 1px solid #99d5bb;
+  color: #99d5bb;
+  background: rgba(153, 213, 187, 0.1);
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+}
+
+.mineMarker {
+  border: 1px solid #e36c62;
+  color: #ffd8c9;
+  background: rgba(227, 108, 98, 0.13);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+
+.terrainHeading {
+  margin: 16px 0 0;
+  padding-top: 13px;
+  border-top: 1px solid rgba(232, 227, 214, 0.09);
+  color: rgba(232, 227, 214, 0.46);
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.legendCard .terrainLegend {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 12px;
+  margin-top: 10px;
+}
+
+.terrainLegend li {
+  gap: 7px;
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: 0.65rem;
+}
+
+.terrainLegend b {
+  margin-left: auto;
+  color: var(--signal-amber);
+  font-size: 0.66rem;
+}
+
+.terrainMarker {
+  width: 11px;
+  height: 8px;
+  flex: 0 0 11px;
+  border: 1px solid rgba(232, 227, 214, 0.24);
+  border-radius: 1px;
+}
+
+.plainMarker {
+  background: #466b59;
+}
+
+.forestMarker {
+  background: #2f5948;
+}
+
+.hillMarker {
+  background: #71684f;
+}
+
+.marshMarker {
+  background: #315f65;
 }
 
 .commandBar {
@@ -411,7 +639,10 @@
   .commandRail {
     display: grid;
     width: 100%;
+    max-height: none;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding-right: 0;
+    overflow: visible;
   }
 
   .turnCard {
@@ -439,7 +670,6 @@
 
   .connectionLabel,
   .mapMeta span:last-child,
-  .mapFooter p,
   .commandBar > .dataLabel,
   .buildMark {
     display: none;
@@ -455,6 +685,12 @@
 
   .mapFooter {
     min-height: 66px;
+    flex-wrap: wrap;
+    gap: 12px 22px;
+  }
+
+  .mapFooter .unitReadout {
+    min-width: 100%;
   }
 
   .commandRail {
@@ -462,7 +698,7 @@
   }
 
   .turnCard {
-    min-height: 250px;
+    min-height: 300px;
   }
 
   .commandBar {

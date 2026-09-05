@@ -9,6 +9,8 @@ public interface IGameMatchRepository
 
     Task<GameMatch?> GetAsync(Guid matchId, CancellationToken cancellationToken);
 
+    Task<IReadOnlyList<Guid>> ListExpiredTurnIdsAsync(DateTimeOffset now, int limit, CancellationToken cancellationToken);
+
     Task AddAsync(GameMatch match, CancellationToken cancellationToken);
 
     Task SaveChangesAsync(CancellationToken cancellationToken);

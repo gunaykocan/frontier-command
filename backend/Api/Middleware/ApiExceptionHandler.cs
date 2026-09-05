@@ -16,7 +16,7 @@ public sealed class ApiExceptionHandler(ILogger<ApiExceptionHandler> logger) : I
         {
             KeyNotFoundException => (StatusCodes.Status404NotFound, "Match not found"),
             MatchConcurrencyException => (StatusCodes.Status409Conflict, "Match state changed"),
-            DomainRuleException => (StatusCodes.Status422UnprocessableEntity, "Move rejected"),
+            DomainRuleException => (StatusCodes.Status422UnprocessableEntity, "Action rejected"),
             ArgumentException => (StatusCodes.Status400BadRequest, "Invalid request"),
             _ => (StatusCodes.Status500InternalServerError, "Unexpected server error")
         };

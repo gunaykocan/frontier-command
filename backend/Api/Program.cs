@@ -1,5 +1,7 @@
+using Game.Api.Authentication;
 using Game.Api.Hubs;
 using Game.Api.Middleware;
+using Game.Api.Services;
 using Game.Application;
 using Game.Infrastructure;
 using Game.Infrastructure.Persistence;
@@ -8,8 +10,16 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Logging.ClearProviders();
+builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddPlayerSessionAuthentication(builder.Configuration, builder.Environment);
+builder.Services.AddScoped<MatchUpdatePublisher>();
+builder.Services.AddHostedService<TurnTimeoutWorker>();
 builder.Services
     .AddControllers()
     .AddJsonOptions(options =>
@@ -52,15 +62,17 @@ if (useRedisBackplane && !string.IsNullOrWhiteSpace(redisConnection))
 
 var app = builder.Build();
 
-if (app.Configuration.GetValue<bool>("Database:InitializeOnStartup"))
+if (app.Configuration.GetValue<bool>("Database:MigrateOnStartup"))
 {
     await using var scope = app.Services.CreateAsyncScope();
     var dbContext = scope.ServiceProvider.GetRequiredService<GameDbContext>();
-    await dbContext.Database.EnsureCreatedAsync();
+    await dbContext.Database.MigrateAsync();
 }
 
 app.UseCors("frontend");
 app.UseExceptionHandler();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 app.MapHealthChecks("/health");

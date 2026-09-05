@@ -11,9 +11,20 @@
     "turnNumber",
     "version",
     "activePlayerId",
+    "turnExpiresAtUtc",
+    "turnDurationSeconds",
+    "serverTimeUtc",
     "winnerPlayerId",
+    "completedAtUtc",
+    "rematchRequestedByPlayerId",
+    "rematchMatchId",
     "players",
+    "terrainTiles",
+    "visibleCoordinates",
     "units",
+    "lastKnownEnemies",
+    "revealedSpecialTiles",
+    "events",
     "createdAtUtc"
   ],
   "properties": {
@@ -21,10 +32,18 @@
     "name": { "type": "string", "minLength": 1, "maxLength": 120 },
     "status": {
       "type": "string",
-      "enum": ["WaitingForPlayers", "InProgress", "Completed", "Abandoned"]
+      "enum": ["WaitingForPlayers", "Deploying", "InProgress", "Completed", "Abandoned"]
     },
     "turnNumber": { "type": "integer", "minimum": 1 },
     "version": { "type": "integer", "minimum": 0 },
+    "turnExpiresAtUtc": {
+      "oneOf": [
+        { "type": "string", "format": "date-time" },
+        { "type": "null" }
+      ]
+    },
+    "turnDurationSeconds": { "type": "integer", "const": 90 },
+    "serverTimeUtc": { "type": "string", "format": "date-time" },
     "activePlayerId": {
       "oneOf": [
         { "type": "string", "format": "uuid" },
@@ -37,17 +56,68 @@
         { "type": "null" }
       ]
     },
+    "completedAtUtc": {
+      "oneOf": [
+        { "type": "string", "format": "date-time" },
+        { "type": "null" }
+      ]
+    },
+    "rematchRequestedByPlayerId": {
+      "oneOf": [
+        { "type": "string", "format": "uuid" },
+        { "type": "null" }
+      ]
+    },
+    "rematchMatchId": {
+      "oneOf": [
+        { "type": "string", "format": "uuid" },
+        { "type": "null" }
+      ]
+    },
     "players": {
       "type": "array",
       "maxItems": 2,
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "name", "seat"],
+        "required": ["id", "name", "seat", "isReady"],
         "properties": {
           "id": { "type": "string", "format": "uuid" },
           "name": { "type": "string", "minLength": 1, "maxLength": 40 },
-          "seat": { "type": "integer", "minimum": 1, "maximum": 2 }
+          "seat": { "type": "integer", "minimum": 1, "maximum": 2 },
+          "isReady": { "type": "boolean" }
+        }
+      }
+    },
+    "terrainTiles": {
+      "type": "array",
+      "minItems": 63,
+      "maxItems": 63,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["column", "row", "type", "movementCost", "defenseBonus", "blocksVision"],
+        "properties": {
+          "column": { "type": "integer", "minimum": 0, "maximum": 8 },
+          "row": { "type": "integer", "minimum": 0, "maximum": 6 },
+          "type": { "type": "string", "enum": ["Plain", "Forest", "Hill", "Marsh"] },
+          "movementCost": { "type": "integer", "minimum": 1, "maximum": 3 },
+          "defenseBonus": { "type": "integer", "minimum": 0, "maximum": 1 },
+          "blocksVision": { "type": "boolean" }
+        }
+      }
+    },
+    "visibleCoordinates": {
+      "type": "array",
+      "maxItems": 63,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["column", "row"],
+        "properties": {
+          "column": { "type": "integer", "minimum": 0, "maximum": 8 },
+          "row": { "type": "integer", "minimum": 0, "maximum": 6 }
         }
       }
     },
@@ -56,12 +126,180 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "ownerPlayerId", "column", "row"],
+        "required": [
+          "id",
+          "ownerPlayerId",
+          "type",
+          "health",
+          "maximumHealth",
+          "remainingMovement",
+          "movementAllowance",
+          "attackPower",
+          "visionRange",
+          "hasAttackedThisTurn",
+          "isRevealedByAttack",
+          "column",
+          "row"
+        ],
         "properties": {
           "id": { "type": "string", "format": "uuid" },
           "ownerPlayerId": { "type": "string", "format": "uuid" },
+          "type": { "type": "string", "enum": ["Scout", "Infantry", "Armor"] },
+          "health": { "type": "integer", "minimum": 0 },
+          "maximumHealth": { "type": "integer", "minimum": 1 },
+          "remainingMovement": { "type": "integer", "minimum": 0 },
+          "movementAllowance": { "type": "integer", "minimum": 1 },
+          "attackPower": { "type": "integer", "minimum": 1 },
+          "visionRange": { "type": "integer", "minimum": 1, "maximum": 3 },
+          "hasAttackedThisTurn": { "type": "boolean" },
+          "isRevealedByAttack": { "type": "boolean" },
           "column": { "type": "integer", "minimum": 0, "maximum": 8 },
           "row": { "type": "integer", "minimum": 0, "maximum": 6 }
+        }
+      }
+    },
+    "lastKnownEnemies": {
+      "type": "array",
+      "description": "Viewer-specific historical sightings; never live enemy state.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["unitId", "unitType", "column", "row", "lastSeenTurnNumber"],
+        "properties": {
+          "unitId": { "type": "string", "format": "uuid" },
+          "unitType": { "type": "string", "enum": ["Scout", "Infantry", "Armor"] },
+          "column": { "type": "integer", "minimum": 0, "maximum": 8 },
+          "row": { "type": "integer", "minimum": 0, "maximum": 6 },
+          "lastSeenTurnNumber": { "type": "integer", "minimum": 1 }
+        }
+      }
+    },
+    "revealedSpecialTiles": {
+      "type": "array",
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["type", "column", "row"],
+        "properties": {
+          "type": { "type": "string", "enum": ["Reinforcement", "Mine"] },
+          "column": { "type": "integer", "minimum": 0, "maximum": 8 },
+          "row": { "type": "integer", "minimum": 0, "maximum": 6 }
+        }
+      }
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "sequence",
+          "type",
+          "turnNumber",
+          "actorPlayerId",
+          "relatedPlayerId",
+          "unitId",
+          "unitType",
+          "targetUnitId",
+          "targetUnitType",
+          "fromColumn",
+          "fromRow",
+          "toColumn",
+          "toRow",
+          "amount",
+          "defenseBonus",
+          "wasDestroyed"
+        ],
+        "properties": {
+          "sequence": { "type": "integer", "minimum": 1 },
+          "type": {
+            "type": "string",
+            "enum": [
+              "DeploymentStarted",
+              "UnitPlaced",
+              "PlayerReady",
+              "BattleStarted",
+              "UnitMoved",
+              "ReinforcementTriggered",
+              "MineTriggered",
+              "UnitAttacked",
+              "TurnEnded",
+              "TurnTimedOut",
+              "MatchCompleted",
+              "RematchRequested",
+              "RematchAccepted"
+            ]
+          },
+          "turnNumber": { "type": "integer", "minimum": 1 },
+          "actorPlayerId": {
+            "oneOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ]
+          },
+          "relatedPlayerId": {
+            "oneOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ]
+          },
+          "unitId": {
+            "oneOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ]
+          },
+          "unitType": {
+            "oneOf": [
+              { "type": "string", "enum": ["Scout", "Infantry", "Armor"] },
+              { "type": "null" }
+            ]
+          },
+          "targetUnitId": {
+            "oneOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ]
+          },
+          "targetUnitType": {
+            "oneOf": [
+              { "type": "string", "enum": ["Scout", "Infantry", "Armor"] },
+              { "type": "null" }
+            ]
+          },
+          "fromColumn": {
+            "oneOf": [
+              { "type": "integer", "minimum": 0, "maximum": 8 },
+              { "type": "null" }
+            ]
+          },
+          "fromRow": {
+            "oneOf": [
+              { "type": "integer", "minimum": 0, "maximum": 6 },
+              { "type": "null" }
+            ]
+          },
+          "toColumn": {
+            "oneOf": [
+              { "type": "integer", "minimum": 0, "maximum": 8 },
+              { "type": "null" }
+            ]
+          },
+          "toRow": {
+            "oneOf": [
+              { "type": "integer", "minimum": 0, "maximum": 6 },
+              { "type": "null" }
+            ]
+          },
+          "amount": {
+            "oneOf": [
+              { "type": "integer", "minimum": 0 },
+              { "type": "null" }
+            ]
+          },
+          "defenseBonus": { "type": "integer", "minimum": 0, "maximum": 1 },
+          "wasDestroyed": { "type": "boolean" }
         }
       }
     },

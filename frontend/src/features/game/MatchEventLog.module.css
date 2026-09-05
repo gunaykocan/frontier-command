@@ -1,0 +1,135 @@
+.card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(232, 227, 214, 0.18);
+  background: rgba(20, 36, 45, 0.92);
+}
+
+.card header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 17px 12px;
+  border-bottom: 1px solid rgba(232, 227, 214, 0.09);
+}
+
+.eyebrow {
+  margin: 0 0 4px;
+  color: rgba(232, 227, 214, 0.5);
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.card h2 {
+  margin: 0;
+  color: #e8e3d6;
+  font-family: Bahnschrift, "Arial Narrow", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+.counter {
+  color: #e3a857;
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: 0.72rem;
+}
+
+.timeline {
+  max-height: 225px;
+  margin: 0;
+  padding: 6px 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-color: rgba(227, 168, 87, 0.45) transparent;
+  list-style: none;
+}
+
+.timeline li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 15px minmax(0, 1fr);
+  gap: 9px;
+  padding: 9px 15px 9px 13px;
+}
+
+.timeline li::before {
+  position: absolute;
+  top: 25px;
+  bottom: -10px;
+  left: 19px;
+  width: 1px;
+  background: rgba(232, 227, 214, 0.11);
+  content: "";
+}
+
+.timeline li:last-child::before {
+  display: none;
+}
+
+.marker {
+  width: 7px;
+  height: 7px;
+  margin: 6px auto 0;
+  border: 1px solid #101d25;
+  outline: 1px solid rgba(153, 213, 187, 0.72);
+  background: #99d5bb;
+  transform: rotate(45deg);
+}
+
+.timeline li[data-type="UnitAttacked"] .marker,
+.timeline li[data-type="MineTriggered"] .marker,
+.timeline li[data-type="TurnTimedOut"] .marker,
+.timeline li[data-type="MatchCompleted"] .marker {
+  outline-color: rgba(227, 108, 98, 0.8);
+  background: #e36c62;
+}
+
+.timeline li[data-type="PlayerReady"] .marker,
+.timeline li[data-type="BattleStarted"] .marker,
+.timeline li[data-type="ReinforcementTriggered"] .marker,
+.timeline li[data-type="RematchRequested"] .marker,
+.timeline li[data-type="RematchAccepted"] .marker,
+.timeline li[data-type="TurnEnded"] .marker {
+  outline-color: rgba(227, 168, 87, 0.82);
+  background: #e3a857;
+}
+
+.turn {
+  display: block;
+  margin-bottom: 2px;
+  color: rgba(232, 227, 214, 0.42);
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.06em;
+}
+
+.timeline strong {
+  display: block;
+  color: #d7e4dc;
+  font-size: 0.72rem;
+  font-weight: 650;
+  line-height: 1.3;
+}
+
+.timeline p,
+.empty {
+  margin: 2px 0 0;
+  color: rgba(232, 227, 214, 0.5);
+  font-size: 0.64rem;
+  line-height: 1.35;
+}
+
+.empty {
+  padding: 18px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .timeline {
+    scroll-behavior: auto;
+  }
+}

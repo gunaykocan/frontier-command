@@ -9,7 +9,10 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "node --experimental-strip-types --test scripts/turn-clock.test.mjs",
+    "smoke:multiplayer": "node scripts/local-multiplayer-smoke.mjs",
+    "smoke:timer": "node scripts/turn-timer-smoke.mjs"
   },
   "dependencies": {
     "@microsoft/signalr": "^10.0.0",

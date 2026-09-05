@@ -29,12 +29,14 @@ backend/coverage/
 .env.*
 !.env.example
 **/appsettings.*.local.json
+**/.data-protection-keys/
 secrets.json
 
 # Logs and temporary files
 *.log
 *.tmp
 *.temp
+.artifacts/
 
 # Workspace-local toolchains
 .tools/

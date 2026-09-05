@@ -1,0 +1,337 @@
+.report {
+  width: 100%;
+  min-height: min(760px, calc(100vh - 154px));
+  border: 1px solid rgba(232, 227, 214, 0.2);
+  background:
+    linear-gradient(rgba(153, 213, 187, 0.026) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(153, 213, 187, 0.026) 1px, transparent 1px),
+    #101d25;
+  background-size: 28px 28px;
+  box-shadow: 0 24px 70px rgba(2, 10, 14, 0.28);
+}
+
+.reportHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 28px;
+  padding: 30px 34px 25px;
+  border-bottom: 1px solid rgba(232, 227, 214, 0.16);
+}
+
+.eyebrow,
+.outcomeStamp span,
+.engagementSummary > span,
+.rematchState span {
+  margin: 0 0 7px;
+  color: rgba(232, 227, 214, 0.48);
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.reportHeader h2 {
+  margin: 0;
+  color: #e8e3d6;
+  font-family: Bahnschrift, "Arial Narrow", sans-serif;
+  font-size: clamp(2rem, 5vw, 4.7rem);
+  font-stretch: condensed;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+.verdict {
+  max-width: 640px;
+  margin: 14px 0 0;
+  color: rgba(232, 227, 214, 0.58);
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.outcomeStamp {
+  min-width: 210px;
+  border: 1px solid rgba(227, 168, 87, 0.52);
+  padding: 14px 16px;
+  box-shadow: inset 4px 0 #e3a857;
+  text-align: right;
+}
+
+.outcomeStamp[data-outcome="defeat"] {
+  border-color: rgba(227, 108, 98, 0.52);
+  box-shadow: inset 4px 0 #e36c62;
+}
+
+.outcomeStamp strong {
+  display: block;
+  color: #e8e3d6;
+  font-family: Bahnschrift, "Arial Narrow", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.battleLine {
+  display: grid;
+  grid-template-areas: "west summary east";
+  grid-template-columns: minmax(240px, 1fr) minmax(190px, 0.72fr) minmax(240px, 1fr);
+  align-items: stretch;
+  padding: 30px 34px;
+}
+
+.playerReport {
+  border: 1px solid rgba(232, 227, 214, 0.16);
+  padding: 22px;
+  background: rgba(27, 43, 53, 0.72);
+}
+
+.playerReport[data-winner="true"] {
+  border-color: rgba(227, 168, 87, 0.5);
+  box-shadow: inset 0 3px #e3a857;
+}
+
+.playerReport[data-side="east"] {
+  text-align: right;
+}
+
+.playerIdentity span,
+.playerIdentity small {
+  display: block;
+  color: rgba(232, 227, 214, 0.45);
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.playerIdentity h3 {
+  margin: 5px 0 4px;
+  color: #d7e4dc;
+  font-family: Bahnschrift, "Arial Narrow", sans-serif;
+  font-size: 1.45rem;
+  font-weight: 600;
+}
+
+.playerReport dl {
+  display: grid;
+  gap: 0;
+  margin: 22px 0 0;
+}
+
+.playerReport dl > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 8px 0;
+  border-top: 1px solid rgba(232, 227, 214, 0.09);
+}
+
+.playerReport[data-side="east"] dl > div {
+  flex-direction: row-reverse;
+}
+
+.playerReport dt {
+  color: rgba(232, 227, 214, 0.5);
+  font-size: 0.7rem;
+}
+
+.playerReport dd {
+  margin: 0;
+  color: #e8e3d6;
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.engagementSummary {
+  position: relative;
+  display: grid;
+  grid-area: summary;
+  place-items: center;
+  align-content: center;
+  gap: 9px;
+  padding: 20px;
+  text-align: center;
+}
+
+.engagementSummary::before,
+.engagementSummary::after {
+  position: absolute;
+  top: 50%;
+  width: 18%;
+  height: 1px;
+  background: rgba(227, 168, 87, 0.5);
+  content: "";
+}
+
+.engagementSummary::before { left: 0; }
+.engagementSummary::after { right: 0; }
+
+.engagementSummary div {
+  display: grid;
+}
+
+.engagementSummary strong {
+  color: #e3a857;
+  font-family: Bahnschrift, "Arial Narrow", sans-serif;
+  font-size: 2.35rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.engagementSummary small {
+  color: rgba(232, 227, 214, 0.48);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+}
+
+.engagementSummary i {
+  width: 7px;
+  height: 7px;
+  background: #e3a857;
+  box-shadow: 0 0 16px rgba(227, 168, 87, 0.55);
+  transform: rotate(45deg);
+}
+
+.reportActions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 34px;
+  border-top: 1px solid rgba(232, 227, 214, 0.16);
+  background: rgba(8, 20, 27, 0.46);
+}
+
+.rematchState {
+  display: grid;
+  min-width: 240px;
+}
+
+.rematchState strong {
+  color: #d7e4dc;
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.buttons {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.buttons button {
+  border: 1px solid rgba(232, 227, 214, 0.22);
+  padding: 10px 14px;
+  color: rgba(232, 227, 214, 0.72);
+  background: rgba(16, 29, 37, 0.8);
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.buttons .primaryButton {
+  border-color: rgba(227, 168, 87, 0.72);
+  color: #201a12;
+  background: #e3a857;
+}
+
+.buttons button:disabled {
+  border-color: rgba(232, 227, 214, 0.11);
+  color: rgba(232, 227, 214, 0.3);
+  background: rgba(8, 20, 27, 0.42);
+}
+
+.buttons button:not(:disabled):hover {
+  border-color: rgba(227, 168, 87, 0.72);
+  color: #e8e3d6;
+}
+
+.buttons .primaryButton:not(:disabled):hover {
+  color: #201a12;
+  background: #efbb6d;
+}
+
+.error {
+  margin: 0;
+  color: #f0c2bc;
+  font-size: 0.7rem;
+}
+
+@media (max-width: 900px) {
+  .battleLine {
+    grid-template-areas: "summary summary" "west east";
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .engagementSummary {
+    grid-area: summary;
+    grid-template-columns: repeat(5, auto);
+  }
+
+  .engagementSummary i {
+    margin: 0 8px;
+  }
+
+  .reportActions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .buttons {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .buttons button {
+    flex: 1;
+  }
+}
+
+@media (max-width: 620px) {
+  .reportHeader {
+    flex-direction: column;
+    padding: 24px 20px;
+  }
+
+  .outcomeStamp {
+    width: 100%;
+    text-align: left;
+  }
+
+  .battleLine {
+    grid-template-areas: "summary" "west" "east";
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 20px;
+  }
+
+  .engagementSummary {
+    grid-template-columns: 1fr;
+  }
+
+  .engagementSummary::before,
+  .engagementSummary::after {
+    display: none;
+  }
+
+  .playerReport[data-side="east"] {
+    text-align: left;
+  }
+
+  .playerReport[data-side="east"] dl > div {
+    flex-direction: row;
+  }
+
+  .reportActions {
+    padding: 18px 20px;
+  }
+
+  .buttons {
+    flex-direction: column;
+  }
+}

@@ -1,6 +1,7 @@
 using Game.Application.Abstractions;
 using Game.Application.Common;
 using Game.Domain.Entities;
+using Game.Domain.Enums;
 using Game.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,9 +28,23 @@ public sealed class PostgresGameMatchRepository(GameDbContext dbContext) : IGame
 
     public Task<GameMatch?> GetAsync(Guid matchId, CancellationToken cancellationToken) =>
         dbContext.Matches
+            .AsSplitQuery()
             .Include(match => match.Players)
             .Include(match => match.Units)
+            .Include(match => match.Events)
+            .Include(match => match.SpecialTiles)
+            .Include(match => match.EnemySightings)
             .SingleOrDefaultAsync(match => match.Id == matchId, cancellationToken);
+
+    public async Task<IReadOnlyList<Guid>> ListExpiredTurnIdsAsync(
+        DateTimeOffset now, int limit, CancellationToken cancellationToken) =>
+        await dbContext.Matches
+            .AsNoTracking()
+            .Where(match => match.Status == MatchStatus.InProgress && match.TurnExpiresAtUtc <= now)
+            .OrderBy(match => match.TurnExpiresAtUtc)
+            .Select(match => match.Id)
+            .Take(limit)
+            .ToListAsync(cancellationToken);
 
     public async Task AddAsync(GameMatch match, CancellationToken cancellationToken)
     {

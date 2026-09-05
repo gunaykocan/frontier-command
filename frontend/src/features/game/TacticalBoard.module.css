@@ -1,6 +1,6 @@
 .frame {
   position: relative;
-  min-height: 390px;
+  height: clamp(390px, 42vw, 560px);
   overflow: hidden;
   border-block: 1px solid rgba(232, 227, 214, 0.14);
   background: #101d25;
@@ -20,7 +20,6 @@
   display: block;
   width: 100%;
   height: 100%;
-  min-height: 390px;
   cursor: crosshair;
   touch-action: manipulation;
 }
@@ -39,6 +38,73 @@
   animation: scan 1.8s cubic-bezier(0.65, 0, 0.35, 1) 0.3s 1;
 }
 
+.eventNotice {
+  position: absolute;
+  z-index: 5;
+  top: 18px;
+  left: 50%;
+  display: grid;
+  min-width: min(310px, calc(100% - 44px));
+  padding: 9px 14px 10px;
+  border: 1px solid rgba(153, 213, 187, 0.58);
+  color: #d7e4dc;
+  background: rgba(11, 27, 34, 0.94);
+  box-shadow: 0 14px 34px rgba(2, 10, 14, 0.34), inset 3px 0 #99d5bb;
+  text-align: center;
+  pointer-events: none;
+  transform: translateX(-50%);
+  animation: event-arrival 1.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.eventNotice[data-type="UnitAttacked"],
+.eventNotice[data-type="MineTriggered"],
+.eventNotice[data-type="MatchCompleted"] {
+  border-color: rgba(227, 108, 98, 0.66);
+  box-shadow: 0 14px 34px rgba(2, 10, 14, 0.34), inset 3px 0 #e36c62;
+}
+
+.eventNotice[data-type="TurnEnded"],
+.eventNotice[data-type="TurnTimedOut"],
+.eventNotice[data-type="BattleStarted"],
+.eventNotice[data-type="ReinforcementTriggered"] {
+  border-color: rgba(227, 168, 87, 0.7);
+  box-shadow: 0 14px 34px rgba(2, 10, 14, 0.34), inset 3px 0 #e3a857;
+}
+
+.eventNotice span {
+  color: rgba(232, 227, 214, 0.45);
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: 0.52rem;
+  letter-spacing: 0.16em;
+}
+
+.eventNotice strong {
+  margin-top: 2px;
+  font-family: Bahnschrift, "Arial Narrow", sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+@keyframes event-arrival {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -12px);
+  }
+
+  16%,
+  82% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -4px);
+  }
+}
+
 @keyframes scan {
   0% {
     opacity: 0;
@@ -52,19 +118,22 @@
 
   100% {
     opacity: 0;
-    transform: translateY(390px);
+    transform: translateY(560px);
   }
 }
 
 @media (max-width: 720px) {
-  .frame,
-  .canvas {
-    min-height: 320px;
+  .frame {
+    height: 320px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .scanLine {
     display: none;
+  }
+
+  .eventNotice {
+    animation: none;
   }
 }
