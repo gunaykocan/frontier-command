@@ -1,5 +1,7 @@
 # Frontier Command
 
+[![CI](https://github.com/gunaykocan/frontier-command/actions/workflows/ci.yml/badge.svg)](https://github.com/gunaykocan/frontier-command/actions/workflows/ci.yml)
+
 **Sunucu otoriteli, iki oyunculu ve sıra tabanlı bir taktik strateji oyunu.**
 
 Frontier Command; React/HTML5 Canvas istemcisi ile .NET 10 sunucusunu aynı monorepoda bir araya getiren, yerelde uçtan uca oynanabilir bir portföy projesidir. Oyuncular birliklerini yerleştirir, savaş sisi altında keşif yapar ve süreli turlarda başka bir oyuncunun veya sunucuda çalışan yapay zekânın hattını kırmaya çalışır.
