@@ -73,7 +73,19 @@ Katmanların sorumlulukları, bir hamlenin yaşam döngüsü, savaş sisinin sun
 
 ## Yerel çalıştırma
 
-Önce veri servislerini başlatın:
+Önce örnek ortam dosyasını kopyalayın ve `.env` içindeki parolayı yalnızca yerel makinenizde kullanacağınız bir değerle değiştirin:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Docker Compose bu parolayı PostgreSQL konteynerine verir. Aynı değeri API bağlantısına güvenli biçimde kaydedin; aşağıdaki komutta `YOUR_LOCAL_PASSWORD` bölümünü değiştirin:
+
+```powershell
+dotnet user-secrets set "ConnectionStrings:GameDatabase" "Host=localhost;Port=5432;Database=game;Username=game;Password=YOUR_LOCAL_PASSWORD" --project backend/Api
+```
+
+`.env` ve .NET User Secrets Git'e eklenmez. Ardından veri servislerini başlatın:
 
 ```powershell
 docker compose up -d
@@ -98,6 +110,7 @@ Development ortamında bekleyen EF Core migration'ları uygulama açılışında
 Yeni bir model değişikliğinden sonra migration üretmek için depo kökünden şu komutu çalıştırın:
 
 ```powershell
+$env:ConnectionStrings__GameDatabase = "Host=localhost;Port=5432;Database=game;Username=game;Password=YOUR_LOCAL_PASSWORD"
 dotnet ef migrations add MigrationName --project backend/Infrastructure --startup-project backend/Api --output-dir Persistence/Migrations
 ```
 
@@ -190,7 +203,7 @@ Eski aktif maçlarda daha önce tutulmamış keşif kayıtları uydurulmaz; yeni
 
 ## Yapılandırma
 
-Yerel bağlantı bilgileri `backend/Api/appsettings.Development.json` ile `compose.yaml` arasında eşleşir. Üretimde bağlantı bilgilerini dosyaya yazmak yerine ortam değişkenleri veya secret manager kullanın:
+Yerel PostgreSQL parolası `.env` ve .NET User Secrets içinde tutulur; depoya kaydedilmez. Üretimde de bağlantı bilgilerini dosyaya yazmak yerine ortam değişkenleri veya secret manager kullanın:
 
 ```text
 ConnectionStrings__GameDatabase
