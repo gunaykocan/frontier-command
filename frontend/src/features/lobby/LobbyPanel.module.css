@@ -63,9 +63,25 @@
   text-transform: uppercase;
 }
 
-.createCard > button {
-  width: 100%;
+.createActions {
+  display: grid;
+  gap: 8px;
   margin-top: 12px;
+}
+
+.createActions button {
+  width: 100%;
+}
+
+.createActions .botButton {
+  border-color: rgba(110, 194, 172, 0.68);
+  color: #d8f5ec;
+  background: rgba(42, 117, 99, 0.38);
+}
+
+.createActions .botButton:hover:not(:disabled) {
+  border-color: rgba(132, 224, 198, 0.9);
+  background: rgba(42, 117, 99, 0.58);
 }
 
 .lobby button:disabled {

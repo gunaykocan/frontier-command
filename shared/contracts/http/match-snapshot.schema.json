@@ -80,12 +80,13 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "name", "seat", "isReady"],
+        "required": ["id", "name", "seat", "isReady", "isBot"],
         "properties": {
           "id": { "type": "string", "format": "uuid" },
           "name": { "type": "string", "minLength": 1, "maxLength": 40 },
           "seat": { "type": "integer", "minimum": 1, "maximum": 2 },
-          "isReady": { "type": "boolean" }
+          "isReady": { "type": "boolean" },
+          "isBot": { "type": "boolean" }
         }
       }
     },

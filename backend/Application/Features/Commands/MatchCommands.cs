@@ -1,6 +1,6 @@
 namespace Game.Application.Features.Commands;
 
-public sealed record CreateMatchCommand(string MatchName, string PlayerName);
+public sealed record CreateMatchCommand(string MatchName, string PlayerName, bool PlayAgainstBot = false);
 
 public sealed record JoinMatchCommand(Guid MatchId, string PlayerName);
 

@@ -27,7 +27,7 @@ Oyunun doğruluk kaynağıdır. Maç, oyuncu, birlik, arazi, özel bölge, gör�
 
 ### Application
 
-Kullanım senaryolarını yönetir. API'den gelen komutu alır, oyuncu yetkisini ve beklenen maç sürümünü doğrular, Domain davranışını çalıştırır ve sonucu repository portu üzerinden kaydeder.
+Kullanım senaryolarını yönetir. API'den gelen komutu alır, oyuncu yetkisini ve beklenen maç sürümünü doğrular, Domain davranışını çalıştırır ve sonucu repository portu üzerinden kaydeder. Tek oyunculu moddaki bot planlayıcısı da bu katmandadır; seçtiği hamleleri insan oyuncuyla aynı Domain metotları üzerinden uygular.
 
 ### Infrastructure
 

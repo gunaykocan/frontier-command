@@ -81,6 +81,16 @@ public sealed class GameMatch
 
     public GamePlayer Join(string playerName, DateTimeOffset joinedAtUtc)
     {
+        return JoinPlayer(playerName, joinedAtUtc, isBot: false);
+    }
+
+    public GamePlayer JoinBot(string playerName, DateTimeOffset joinedAtUtc)
+    {
+        return JoinPlayer(playerName, joinedAtUtc, isBot: true);
+    }
+
+    private GamePlayer JoinPlayer(string playerName, DateTimeOffset joinedAtUtc, bool isBot)
+    {
         if (Status is not MatchStatus.WaitingForPlayers || _players.Count >= PlayerCapacity)
         {
             throw new DomainRuleException("This match is no longer accepting players.");
@@ -93,7 +103,7 @@ public sealed class GameMatch
             throw new DomainRuleException("Player names must be unique within a match.");
         }
 
-        var player = GamePlayer.Create(Id, normalizedName, seat: 2, joinedAtUtc);
+        var player = GamePlayer.Create(Id, normalizedName, seat: 2, joinedAtUtc, isBot);
         _players.Add(player);
         StartDeployment();
 
@@ -337,12 +347,14 @@ public sealed class GameMatch
             rematch.Id,
             originalPlayers[1].Name,
             seat: 1,
-            createdAtUtc));
+            createdAtUtc,
+            originalPlayers[1].IsBot));
         rematch._players.Add(GamePlayer.Create(
             rematch.Id,
             originalPlayers[0].Name,
             seat: 2,
-            createdAtUtc));
+            createdAtUtc,
+            originalPlayers[0].IsBot));
         rematch.StartDeployment();
 
         AddEvent(

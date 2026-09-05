@@ -48,7 +48,7 @@ public sealed class MatchesController(
         CancellationToken cancellationToken)
     {
         var session = await matchService.CreateAsync(
-            new CreateMatchCommand(request.MatchName, request.PlayerName),
+            new CreateMatchCommand(request.MatchName, request.PlayerName, request.PlayAgainstBot),
             cancellationToken);
 
         cookieService.Issue(Response, Request.IsHttps, session.PlayerId, session.Match.Id);

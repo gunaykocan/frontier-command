@@ -37,10 +37,14 @@ export function listMatches(): Promise<MatchSummary[]> {
   return request<MatchSummary[]>("/api/matches");
 }
 
-export function createMatch(matchName: string, playerName: string): Promise<PlayerSession> {
+export function createMatch(
+  matchName: string,
+  playerName: string,
+  playAgainstBot = false,
+): Promise<PlayerSession> {
   return request<PlayerSession>("/api/matches", {
     method: "POST",
-    body: JSON.stringify({ matchName, playerName }),
+    body: JSON.stringify({ matchName, playerName, playAgainstBot }),
   });
 }
 

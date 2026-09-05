@@ -85,7 +85,12 @@ public sealed record MatchSnapshot(
         match.RematchMatchId,
         match.Players
             .OrderBy(player => player.Seat)
-            .Select(player => new PlayerSnapshot(player.Id, player.Name, player.Seat, player.IsReady))
+            .Select(player => new PlayerSnapshot(
+                player.Id,
+                player.Name,
+                player.Seat,
+                player.IsReady,
+                player.IsBot))
             .ToList(),
         BattlefieldTerrain.Tiles
             .Select(tile => new TerrainTileSnapshot(
@@ -221,7 +226,7 @@ public sealed record MatchSnapshot(
 
 }
 
-public sealed record PlayerSnapshot(Guid Id, string Name, int Seat, bool IsReady);
+public sealed record PlayerSnapshot(Guid Id, string Name, int Seat, bool IsReady, bool IsBot);
 
 public sealed record LastKnownEnemySnapshot(Guid UnitId, UnitType UnitType, int Column, int Row, int LastSeenTurnNumber);
 

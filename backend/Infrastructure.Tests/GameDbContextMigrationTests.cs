@@ -51,6 +51,18 @@ public sealed class GameDbContextMigrationTests
     }
 
     [Fact]
+    public void BotPlayerPropertyIsRegistered()
+    {
+        using var dbContext = CreateDbContext();
+        var migrations = dbContext.Database.GetMigrations();
+        var player = dbContext.Model.FindEntityType(typeof(GamePlayer));
+
+        Assert.Contains(migrations, migration => migration.EndsWith("_AddBotPlayer", StringComparison.Ordinal));
+        Assert.Equal("is_bot", player?.FindProperty(nameof(GamePlayer.IsBot))?.GetColumnName());
+        Assert.False((bool?)player?.FindProperty(nameof(GamePlayer.IsBot))?.GetDefaultValue());
+    }
+
+    [Fact]
     public void MatchVersionRemainsAConcurrencyToken()
     {
         using var dbContext = CreateDbContext();

@@ -78,6 +78,7 @@ export function AfterActionReport({
     match.rematchRequestedByPlayerId
     && match.rematchRequestedByPlayerId !== viewerPlayerId,
   );
+  const botMatch = match.players.some((player) => player.isBot);
 
   return (
     <section className={styles.report} aria-labelledby="after-action-title">
@@ -107,7 +108,11 @@ export function AfterActionReport({
             <div className={styles.playerIdentity}>
               <span>{report.player.seat === 1 ? "Batı komutası" : "Doğu komutası"}</span>
               <h3>{report.player.name}</h3>
-              <small>{report.player.id === viewerPlayerId ? "Sen" : "Rakip"}</small>
+              <small>{report.player.id === viewerPlayerId
+                ? "Sen"
+                : report.player.isBot
+                  ? "Yapay zekâ"
+                  : "Rakip"}</small>
             </div>
             <dl>
               <div><dt>Hareket</dt><dd>{report.moves}</dd></div>
@@ -131,7 +136,9 @@ export function AfterActionReport({
       <footer className={styles.reportActions}>
         <div className={styles.rematchState}>
           <span>Rövanş kanalı</span>
-          <strong>{match.rematchMatchId
+          <strong>{botMatch
+            ? "Yeni bir yapay zekâ operasyonu başlatabilirsin"
+            : match.rematchMatchId
             ? "Yeni operasyona aktarılıyorsunuz"
             : requestedByViewer
               ? "Rakibin yanıtı bekleniyor"
@@ -141,7 +148,7 @@ export function AfterActionReport({
         </div>
         {error && <p className={styles.error} role="alert">{error}</p>}
         <div className={styles.buttons}>
-          {!match.rematchMatchId && (
+          {!botMatch && !match.rematchMatchId && (
             <button
               className={styles.primaryButton}
               type="button"

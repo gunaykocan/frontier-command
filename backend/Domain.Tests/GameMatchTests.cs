@@ -50,6 +50,19 @@ public sealed class GameMatchTests
         Assert.Equal([2, 3, 4], guestUnits.Values.Select(unit => unit.Row).Order().ToArray());
     }
 
+    [Fact]
+    public void JoiningBotMarksOnlyTheAutomatedPlayer()
+    {
+        var (match, host) = GameMatch.Create("Tek oyunculu", "Atlas", Now);
+
+        var bot = match.JoinBot("Komuta Botu", Now);
+
+        Assert.False(host.IsBot);
+        Assert.True(bot.IsBot);
+        Assert.Equal(2, bot.Seat);
+        Assert.Equal(MatchStatus.Deploying, match.Status);
+    }
+
     [Theory]
     [InlineData(1)]
     [InlineData(2)]

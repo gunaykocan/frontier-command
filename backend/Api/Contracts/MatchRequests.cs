@@ -1,6 +1,9 @@
 namespace Game.Api.Contracts;
 
-public sealed record CreateMatchRequest(string MatchName, string PlayerName);
+public sealed record CreateMatchRequest(
+    string MatchName,
+    string PlayerName,
+    bool PlayAgainstBot = false);
 
 public sealed record JoinMatchRequest(string PlayerName);
 

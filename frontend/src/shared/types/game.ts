@@ -10,6 +10,7 @@ export type PlayerSnapshot = {
   name: string;
   seat: number;
   isReady: boolean;
+  isBot: boolean;
 };
 
 export type UnitType = "Scout" | "Infantry" | "Armor";

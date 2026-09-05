@@ -10,7 +10,7 @@ type LobbyPanelProps = {
   error: string | null;
   onPlayerNameChange: (value: string) => void;
   onMatchNameChange: (value: string) => void;
-  onCreate: () => Promise<void>;
+  onCreate: (playAgainstBot: boolean) => Promise<void>;
   onJoin: (matchId: string) => Promise<void>;
   onRefresh: () => Promise<void>;
 };
@@ -29,7 +29,7 @@ export function LobbyPanel({
 }: LobbyPanelProps) {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    void onCreate();
+    void onCreate(false);
   };
 
   const openMatches = matches.filter((match) => match.status === "WaitingForPlayers");
@@ -60,9 +60,19 @@ export function LobbyPanel({
             onChange={(event) => onMatchNameChange(event.target.value)}
           />
         </label>
-        <button type="submit" disabled={busy || !playerName.trim() || !matchName.trim()}>
-          Oyun oluştur
-        </button>
+        <div className={styles.createActions}>
+          <button type="submit" disabled={busy || !playerName.trim() || !matchName.trim()}>
+            İki oyunculu oluştur
+          </button>
+          <button
+            className={styles.botButton}
+            type="button"
+            disabled={busy || !playerName.trim() || !matchName.trim()}
+            onClick={() => void onCreate(true)}
+          >
+            Yapay zekâya karşı oyna
+          </button>
+        </div>
       </form>
 
       <section className={styles.openCard}>

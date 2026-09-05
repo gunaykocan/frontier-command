@@ -6,12 +6,19 @@ public sealed class GamePlayer
     {
     }
 
-    private GamePlayer(Guid id, Guid matchId, string name, int seat, DateTimeOffset joinedAtUtc)
+    private GamePlayer(
+        Guid id,
+        Guid matchId,
+        string name,
+        int seat,
+        bool isBot,
+        DateTimeOffset joinedAtUtc)
     {
         Id = id;
         MatchId = matchId;
         Name = name;
         Seat = seat;
+        IsBot = isBot;
         JoinedAtUtc = joinedAtUtc;
     }
 
@@ -23,12 +30,19 @@ public sealed class GamePlayer
 
     public int Seat { get; private set; }
 
+    public bool IsBot { get; private set; }
+
     public bool IsReady { get; private set; }
 
     public DateTimeOffset JoinedAtUtc { get; private set; }
 
-    internal static GamePlayer Create(Guid matchId, string name, int seat, DateTimeOffset joinedAtUtc) =>
-        new(Guid.NewGuid(), matchId, name, seat, joinedAtUtc);
+    internal static GamePlayer Create(
+        Guid matchId,
+        string name,
+        int seat,
+        DateTimeOffset joinedAtUtc,
+        bool isBot = false) =>
+        new(Guid.NewGuid(), matchId, name, seat, isBot, joinedAtUtc);
 
     internal void MarkReady()
     {

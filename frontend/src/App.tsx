@@ -445,12 +445,12 @@ function App() {
     ));
   }, [match?.units, ownUnit, selectedUnitId, session?.playerId]);
 
-  const handleCreate = async () => {
+  const handleCreate = async (playAgainstBot: boolean) => {
     setLobbyBusy(true);
     setLobbyError(null);
 
     try {
-      applySession(await createMatch(matchName.trim(), playerName.trim()));
+      applySession(await createMatch(matchName.trim(), playerName.trim(), playAgainstBot));
     } catch (error) {
       setLobbyError(messageFrom(error));
     } finally {
@@ -1108,14 +1108,14 @@ function App() {
             <section className={styles.systemCard}>
               <header>
                 <p className={styles.eyebrow}>Oyuncular</p>
-                <span className={styles.statusTag}>{match.players.length}/2 bağlı</span>
+                <span className={styles.statusTag}>{match.players.length}/2 oyuncu</span>
               </header>
               <dl>
                 {match.players.map((player) => (
                   <div key={player.id}>
                     <dt>{player.seat === 1 ? "Batı birliği" : "Doğu birliği"}</dt>
                     <dd>
-                      {player.name}{player.id === session?.playerId ? " · sen" : ""}
+                      {player.name}{player.isBot ? " · BOT" : ""}{player.id === session?.playerId ? " · sen" : ""}
                       {match.status === "Deploying" && (
                         <span className={player.isReady ? styles.playerReady : styles.playerPreparing}>
                           {player.isReady ? "hazır" : "yerleşiyor"}

@@ -1,16 +1,27 @@
 using Game.Application.Abstractions;
 using Game.Application.Common;
+using Game.Application.Features.Bots;
 using Game.Domain.Entities;
 
 namespace Game.Application.Features.Commands;
 
-public sealed class MatchService(IGameMatchRepository repository, TimeProvider timeProvider)
+public sealed class MatchService(
+    IGameMatchRepository repository,
+    TimeProvider timeProvider,
+    BotTurnExecutor botTurnExecutor)
 {
     public async Task<PlayerSession> CreateAsync(
         CreateMatchCommand command,
         CancellationToken cancellationToken)
     {
-        var (match, host) = GameMatch.Create(command.MatchName, command.PlayerName, timeProvider.GetUtcNow());
+        var now = timeProvider.GetUtcNow();
+        var (match, host) = GameMatch.Create(command.MatchName, command.PlayerName, now);
+
+        if (command.PlayAgainstBot)
+        {
+            var bot = match.JoinBot("Komuta Botu", now);
+            match.ReadyPlayer(bot.Id, match.Version, now);
+        }
 
         await repository.AddAsync(match, cancellationToken);
         await repository.SaveChangesAsync(cancellationToken);
@@ -100,7 +111,9 @@ public sealed class MatchService(IGameMatchRepository repository, TimeProvider t
         CancellationToken cancellationToken)
     {
         var match = await GetMatchAsync(command.MatchId, cancellationToken);
-        match.EndTurn(command.PlayerId, command.ExpectedVersion, timeProvider.GetUtcNow());
+        var now = timeProvider.GetUtcNow();
+        match.EndTurn(command.PlayerId, command.ExpectedVersion, now);
+        botTurnExecutor.ExecuteIfBotTurn(match, now);
 
         await repository.SaveChangesAsync(cancellationToken);
 
@@ -177,7 +190,10 @@ public sealed class MatchService(IGameMatchRepository repository, TimeProvider t
     public async Task<bool> ExpireTurnAsync(Guid matchId, CancellationToken cancellationToken)
     {
         var match = await GetMatchAsync(matchId, cancellationToken);
-        if (!match.TryExpireTurn(timeProvider.GetUtcNow())) return false;
+        var now = timeProvider.GetUtcNow();
+        if (!match.TryExpireTurn(now)) return false;
+
+        botTurnExecutor.ExecuteIfBotTurn(match, now);
 
         await repository.SaveChangesAsync(cancellationToken);
         return true;

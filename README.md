@@ -2,13 +2,13 @@
 
 **Sunucu otoriteli, iki oyunculu ve sıra tabanlı bir taktik strateji oyunu.**
 
-Frontier Command; React/HTML5 Canvas istemcisi ile .NET 10 sunucusunu aynı monorepoda bir araya getiren, yerelde uçtan uca oynanabilir bir portföy projesidir. Oyuncular birliklerini yerleştirir, savaş sisi altında keşif yapar ve süreli turlarda rakibin hattını kırmaya çalışır.
+Frontier Command; React/HTML5 Canvas istemcisi ile .NET 10 sunucusunu aynı monorepoda bir araya getiren, yerelde uçtan uca oynanabilir bir portföy projesidir. Oyuncular birliklerini yerleştirir, savaş sisi altında keşif yapar ve süreli turlarda başka bir oyuncunun veya sunucuda çalışan yapay zekânın hattını kırmaya çalışır.
 
 ## Projenin durumu
 
-Oynanabilir alfa sürümü tamamlandı. İki ayrı tarayıcı oturumuyla maç oluşturma, yerleştirme, hareket, çatışma, tur zaman aşımı, savaş sisi, gizli bölgeler, maç sonucu ve rövanş akışları oynanabilir. Oyun durumu PostgreSQL'de kalıcıdır; değişiklikler SignalR ile iki oyuncuya anlık iletilir.
+Oynanabilir alfa sürümü tamamlandı. Tek oyunculu yapay zekâ veya iki ayrı tarayıcı oturumuyla multiplayer maç oluşturma, yerleştirme, hareket, çatışma, tur zaman aşımı, savaş sisi, gizli bölgeler, maç sonucu ve rövanş akışları oynanabilir. Oyun durumu PostgreSQL'de kalıcıdır; değişiklikler SignalR ile oyunculara anlık iletilir.
 
-Kalite kontrolü 75 backend testi, 6 frontend testi ve üretim derlemesinden oluşur. GitHub Actions, her `main` gönderiminde ve pull request'te bu kontrolleri otomatik çalıştırır.
+Kalite kontrolü 82 backend testi, 6 frontend testi ve üretim derlemesinden oluşur. GitHub Actions, her `main` gönderiminde ve pull request'te bu kontrolleri otomatik çalıştırır.
 
 ## Teknik açıdan öne çıkanlar
 
@@ -16,6 +16,7 @@ Kalite kontrolü 75 backend testi, 6 frontend testi ve üretim derlemesinden olu
 - **Oyuncuya özel veri görünümü:** görünmeyen rakip birlikleri yalnızca arayüzde saklanmaz, HTTP ve SignalR yanıtlarından sunucuda çıkarılır.
 - **Eşzamanlılık güvenliği:** maç sürümü, çakışan hamlelerin ve aynı turun iki kez sonlandırılmasının önüne geçer.
 - **Kalıcı tur sayacı:** tur bitiş zamanı veritabanında tutulur; oyuncular bağlı değilken de süre dolabilir.
+- **Sunucu taraflı yapay zekâ:** bot, insan oyuncuyla aynı hareket, saldırı, görüş ve tur kurallarını kullanır.
 - **Katmanlı backend:** Domain, Application, Infrastructure ve API sorumlulukları ayrıdır.
 - **Gerçek altyapı testi:** Docker üzerindeki PostgreSQL ve Redis ile iki oyunculu uçtan uca smoke senaryoları bulunur.
 
@@ -110,6 +111,8 @@ pnpm dev
 
 Arayüz `http://localhost:5173`, API ise `http://localhost:5080` adresinde açılır. Vite geliştirme sunucusu `/api`, `/health` ve `/hubs` isteklerini API'ye yönlendirir.
 
+Lobide **Yapay zekâya karşı oyna** seçildiğinde sunucu ikinci koltuğa hazır bir bot ekler. İnsan oyuncu yerleşimini tamamladıktan sonra savaş başlar. Bot kendi turunda görünür bir saldırı fırsatını önceliklendirir; saldırı yoksa birliklerini görünen düşmana veya rakip komuta kenarına doğru ilerletir ve turu insana geri verir.
+
 PostgreSQL, API ve Redis çalışırken iki bağımsız oyuncu oturumu, SignalR güncellemeleri, hareket, tur devri, saldırı, gizli bölge, oturum geri yükleme, rövanş ve araziye bağlı görüş hattını gerçek altyapıda sınamak için:
 
 ```powershell
@@ -147,7 +150,7 @@ Oyun oluşturma veya katılma işleminden sonra sunucu, şifrelenmiş ve imzalan
 
 ## İlk oyun kuralları
 
-- İkinci oyuncu katılınca yerleştirme aşaması başlar; her oyuncu 1 İzci, 3 Piyade ve 1 Zırhlı olmak üzere beş birlikle başlar. İzci, öncü piyade ve zırhlı B3/B4/B5 (doğuda H3/H4/H5), iki ek piyade A4/A5 (doğuda I4/I5) hücrelerine yerleşir.
+- İkinci oyuncu katılınca veya yapay zekâ modu seçilince yerleştirme aşaması başlar; her oyuncu 1 İzci, 3 Piyade ve 1 Zırhlı olmak üzere beş birlikle başlar. İzci, öncü piyade ve zırhlı B3/B4/B5 (doğuda H3/H4/H5), iki ek piyade A4/A5 (doğuda I4/I5) hücrelerine yerleşir.
 - Beş birlikli düzen yeni oyunlarda ve rövanşta kullanılır; daha önce yerleştirmesi yapılmış veya başlamış maçların orduları değiştirilmez. Harita 9×7 ve ortak tur süresi 90 saniye olarak kalır.
 - Batı oyuncusu A-B, doğu oyuncusu H-I sütunlarındaki boş hücrelere birliklerini yerleştirir.
 - Her iki oyuncu da yerleşimini “Hazırım” ile kilitlediğinde savaş başlar ve Batı oyuncusu ilk hamleyi yapar.
@@ -208,6 +211,6 @@ Oyuncu oturumları ASP.NET Core Data Protection ile korunur. Üretim veya birden
 
 1. README'ye kısa oynanış GIF'i ve ekran görüntüleri eklemek.
 2. Temel kullanıcı akışları için React etkileşim testlerini genişletmek.
-3. Oyun dengesini ölçmek için kayıtlı maçlardan denge metrikleri üretmek.
-4. JSON Schema üzerinden C# ve TypeScript tip üretimini otomatikleştirmek.
-5. Birliklere keşif, mevzilenme ve bastırma gibi özel yetenekler eklemek.
+3. Yapay zekâya kolay/orta zorluk seçenekleri ve farklı stratejiler eklemek.
+4. Oyun dengesini ölçmek için kayıtlı maçlardan denge metrikleri üretmek.
+5. JSON Schema üzerinden C# ve TypeScript tip üretimini otomatikleştirmek.

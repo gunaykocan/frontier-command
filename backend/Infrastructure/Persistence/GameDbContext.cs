@@ -81,6 +81,7 @@ public sealed class GameDbContext(DbContextOptions<GameDbContext> options) : DbC
         player.Property(item => item.MatchId).HasColumnName("match_id");
         player.Property(item => item.Name).HasColumnName("name").HasMaxLength(40).IsRequired();
         player.Property(item => item.Seat).HasColumnName("seat");
+        player.Property(item => item.IsBot).HasColumnName("is_bot").HasDefaultValue(false);
         player.Property(item => item.IsReady).HasColumnName("is_ready").HasDefaultValue(false);
         player.Property(item => item.JoinedAtUtc).HasColumnName("joined_at_utc");
         player.HasIndex(item => new { item.MatchId, item.Seat }).IsUnique();
