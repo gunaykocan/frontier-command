@@ -6,6 +6,24 @@
 
 Frontier Command; React/HTML5 Canvas istemcisi ile .NET 10 sunucusunu aynı monorepoda bir araya getiren, yerelde uçtan uca oynanabilir bir portföy projesidir. Oyuncular birliklerini yerleştirir, savaş sisi altında keşif yapar ve süreli turlarda başka bir oyuncunun veya sunucuda çalışan yapay zekânın hattını kırmaya çalışır.
 
+## Oynanıştan görüntüler
+
+### İlk temas ve görüş alanı
+
+![İlk turda birlikler ve aydınlatılmış görüş alanı](docs/screenshots/opening-turn.png)
+
+### Savaş sisi altında keşif
+
+![Keşif sırasında görünen düşmanlar ve son bilinen konum işaretleri](docs/screenshots/reconnaissance.png)
+
+### İleri safha çatışması
+
+![Haritanın merkezinde ilerleyen birlikler ve görünür düşmanlar](docs/screenshots/late-game-combat.png)
+
+### Harekât sonrası rapor
+
+![Tamamlanan maçın oyuncu ve yapay zekâ istatistikleri](docs/screenshots/operation-report.png)
+
 ## Projenin durumu
 
 Oynanabilir alfa sürümü tamamlandı. Tek oyunculu yapay zekâ veya iki ayrı tarayıcı oturumuyla multiplayer maç oluşturma, yerleştirme, hareket, çatışma, tur zaman aşımı, savaş sisi, gizli bölgeler, maç sonucu ve rövanş akışları oynanabilir. Oyun durumu PostgreSQL'de kalıcıdır; değişiklikler SignalR ile oyunculara anlık iletilir.
@@ -224,7 +242,7 @@ Oyuncu oturumları ASP.NET Core Data Protection ile korunur. Üretim veya birden
 
 ## Yol haritası
 
-1. README'ye kısa oynanış GIF'i ve ekran görüntüleri eklemek.
+1. README'ye kısa bir oynanış GIF'i eklemek.
 2. Temel kullanıcı akışları için React etkileşim testlerini genişletmek.
 3. Yapay zekâya kolay/orta zorluk seçenekleri ve farklı stratejiler eklemek.
 4. Oyun dengesini ölçmek için kayıtlı maçlardan denge metrikleri üretmek.
